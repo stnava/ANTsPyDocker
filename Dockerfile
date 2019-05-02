@@ -1,5 +1,4 @@
 FROM rocker/binder:3.5.0
-FROM python:3.5
 
 USER root
 COPY . ${HOME}
@@ -19,6 +18,7 @@ RUN apt-get install -y x11vnc xvfb sudo libv8-dev
 
 ## Run an install.R script, if it exists.
 RUN if [ -f install.R ]; then R --quiet -f install.R; fi
+RUN apt-get python3.5 python3-pip python3-setuptools python3-dev
 
 RUN pip3 install scipy pandas numpy matplotlib sklearn statsmodels nibabel
 RUN pip3 install coveralls plotly webcolors scikit-image

@@ -1,42 +1,26 @@
-ARG BASE_CONTAINER=jupyter/base-notebook
-FROM $BASE_CONTAINER
-FROM python:3.6
-
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+FROM rocker/binder:3.5.0
+FROM python:3.5
 
 USER root
+COPY . ${HOME}
+COPY --chown=rstudio:rstudio . ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
 
-# Install all OS dependencies for fully functional notebook server
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    build-essential \
-    emacs \
-    git \
-    inkscape \
-    jed \
-    libsm6 \
-    libxext-dev \
-    libxrender1 \
-    lmodern \
-    netcat \
-    pandoc \
-    python-dev \
-    texlive-fonts-extra \
-    texlive-fonts-recommended \
-    texlive-generic-recommended \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-xetex \
-    tzdata \
-    unzip \
-    nano \
-    && rm -rf /var/lib/apt/lists/*
 
-#
+COPY . /usr/local/src/scripts
+COPY ./scripts/* /usr/local/src/scripts
+WORKDIR /usr/local/src/scripts
+RUN apt-get update; \
+    apt-get -y upgrade
+RUN apt-get -y install cmake   libssl-dev
+RUN apt-get install -qqy x11-apps
+RUN apt-get install -y vim nano zsh curl git sudo
+RUN apt-get install -y x11vnc xvfb sudo libv8-dev
+
+## Run an install.R script, if it exists.
+RUN if [ -f install.R ]; then R --quiet -f install.R; fi
 
 RUN pip3 install scipy pandas numpy matplotlib sklearn statsmodels nibabel
-RUN pip3 install coveralls plotly webcolors scikit-image;
-RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.1.8/antspy-0.1.7-cp36-cp36m-linux_x86_64.whl
-RUN pip3 install antspy-0.1.7-cp36-cp36m-linux_x86_64.whl
-
-# Switch back to jovyan to avoid accidental container runs as root
-USER $NB_UID
+RUN pip3 install coveralls plotly webcolors scikit-image
+RUN pip3 install keras
+RUN git clone https://github.com/ANTsX/ANTsPy.git && cd ANTsPy  && python3 setup.py  install

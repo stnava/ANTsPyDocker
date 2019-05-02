@@ -11,12 +11,18 @@ docker build --build-arg WHEN=2019-05-01 -t  antspy .
  docker tag antspy:latest stnava/antspy:latest
  docker push  stnava/antspy:latest
 
-# # Just create interactive container. No start but named for future reference.
-# Use your own image.
-docker create -it --name reck antspy
+# docker run -i -t --rm antspy:latest
 
-# Now start it.
-docker start reck
+# to clean
+# docker system df
+# docker system prune -a
 
-# Now attach bash session.
-docker exec -it reck bash
+
+Users should run
+
+
+```
+docker run -p 8888:8888 antspy:latest
+```
+
+

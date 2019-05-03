@@ -4,7 +4,9 @@ USER root
 COPY . ${HOME}
 RUN chown -R ${NB_USER} ${HOME}
 
-RUN apt-get install curl
+RUN apt-get update; \
+    apt-get -y upgrade
+RUN apt-get -y install cmake curl
 RUN CMAKE_INSTALLER=install-cmake.sh && \
          curl -sSL https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh -o ${CMAKE_INSTALLER} && \
         chmod +x ${CMAKE_INSTALLER} && \

@@ -9,13 +9,11 @@ RUN chown -R ${NB_USER} ${HOME}
 #        chmod +x ${CMAKE_INSTALLER} && \
 #         ./${CMAKE_INSTALLER} --prefix=/usr/local --skip-license
 # RUN alias cmake=/usr/local/bin/cmake
-RUN pip3 install scipy pandas numpy matplotlib sklearn statsmodels nibabel
-RUN pip3 install coveralls plotly webcolors scikit-image
-RUN pip3 install keras tensorflow
+RUN pip install scipy pandas numpy matplotlib sklearn statsmodels nibabel
+RUN pip install plotly webcolors scikit-image
 # RUN git clone https://github.com/ANTsX/ANTsPy.git && cd ANTsPy  && python3 setup.py  install
 RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.1.8/antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
-# RUN pip3 install antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl -t .
-RUN pip3 install --user antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
+RUN pip install --user antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
 RUN chmod 755 *
 ## Become normal user again
 USER ${NB_USER}

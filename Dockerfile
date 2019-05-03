@@ -19,7 +19,7 @@ RUN pip install plotly webcolors scikit-image
 RUN pip install wheel
 RUN git clone https://github.com/ANTsX/ANTsPy.git
 RUN cd ANTsPy  && python3 setup.py  install
-RUN python3 setup.py bdist_wheel && cd ..
+RUN cd ANTsPy  && python3 setup.py bdist_wheel && cd ..
 # RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.1.8/antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
 # RUN pip install --user antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
 # RUN chmod 755 *

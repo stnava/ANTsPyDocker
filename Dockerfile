@@ -1,4 +1,12 @@
 FROM python:3.5
+
+USER root
+COPY . ${HOME}
+COPY --chown=rstudio:rstudio . ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
+
+
+
 RUN CMAKE_INSTALLER=install-cmake.sh && \
         curl -sSL https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh -o ${CMAKE_INSTALLER} && \
         chmod +x ${CMAKE_INSTALLER} && \
@@ -11,3 +19,7 @@ RUN pip3 install keras tensorflow
 RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.1.8/antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
 RUN pip3 install antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl -t .
 RUN pip3 install --user antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
+RUN chmod 755 *
+## Become normal user again
+USER ${NB_USER}
+

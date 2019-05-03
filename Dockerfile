@@ -1,26 +1,13 @@
-FROM rocker/binder:3.5.0
-
-USER root
-COPY . ${HOME}
-COPY --chown=rstudio:rstudio . ${HOME}
-RUN chown -R ${NB_USER} ${HOME}
-
-
-COPY . /usr/local/src/scripts
-COPY ./scripts/* /usr/local/src/scripts
-WORKDIR /usr/local/src/scripts
-RUN apt-get update; \
-    apt-get -y upgrade
-RUN apt-get -y install cmake   libssl-dev
-RUN apt-get install -qqy x11-apps
-RUN apt-get install -y vim nano zsh curl git sudo
-RUN apt-get install -y x11vnc xvfb sudo libv8-dev
-
-## Run an install.R script, if it exists.
-RUN if [ -f install.R ]; then R --quiet -f install.R; fi
-RUN apt-get python3.5 python3-pip python3-setuptools python3-dev
-
+FROM python:3.5
+RUN CMAKE_INSTALLER=install-cmake.sh && \
+        curl -sSL https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh -o ${CMAKE_INSTALLER} && \
+        chmod +x ${CMAKE_INSTALLER} && \
+         ./${CMAKE_INSTALLER} --prefix=/usr/local --skip-license
+RUN alias cmake=/usr/local/bin/cmake
 RUN pip3 install scipy pandas numpy matplotlib sklearn statsmodels nibabel
 RUN pip3 install coveralls plotly webcolors scikit-image
-RUN pip3 install keras
-RUN git clone https://github.com/ANTsX/ANTsPy.git && cd ANTsPy  && python3 setup.py  install
+RUN pip3 install keras tensorflow
+# RUN git clone https://github.com/ANTsX/ANTsPy.git && cd ANTsPy  && python3 setup.py  install
+RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.1.8/antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl
+RUN sudo -H pip3 install antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl -t .
+RUN sudo -H pip3 install --user antspyx-0.1.7-cp35-cp35m-linux_x86_64.whl

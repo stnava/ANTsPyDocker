@@ -4,10 +4,11 @@ USER root
 COPY . ${HOME}
 RUN chown -R ${NB_USER} ${HOME}
 
-# RUN CMAKE_INSTALLER=install-cmake.sh && \
-#         curl -sSL https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh -o ${CMAKE_INSTALLER} && \
-#        chmod +x ${CMAKE_INSTALLER} && \
-#         ./${CMAKE_INSTALLER} --prefix=/usr/local --skip-license
+RUN apt-get install curl
+RUN CMAKE_INSTALLER=install-cmake.sh && \
+         curl -sSL https://cmake.org/files/v3.11/cmake-3.11.3-Linux-x86_64.sh -o ${CMAKE_INSTALLER} && \
+        chmod +x ${CMAKE_INSTALLER} && \
+         ./${CMAKE_INSTALLER} --prefix=/usr/local --skip-license
 # RUN alias cmake=/usr/local/bin/cmake
 # RUN apt-get install -y python3 python3-pip python-pip
 #	RUN chown -R ${NB_USER} /home/rstudio/.cache/pip/http

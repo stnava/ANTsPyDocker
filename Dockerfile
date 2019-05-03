@@ -9,6 +9,9 @@ RUN chown -R ${NB_USER} ${HOME}
 #        chmod +x ${CMAKE_INSTALLER} && \
 #         ./${CMAKE_INSTALLER} --prefix=/usr/local --skip-license
 # RUN alias cmake=/usr/local/bin/cmake
+RUN apt-get install -y python3 python3-pip python-pip
+	RUN chown -R ${NB_USER} /home/rstudio/.cache/pip/http
+	RUN chown -R ${NB_USER} /home/rstudio/.cache/pip
 RUN pip install scipy pandas numpy matplotlib sklearn statsmodels nibabel
 RUN pip install plotly webcolors scikit-image
 # RUN git clone https://github.com/ANTsX/ANTsPy.git && cd ANTsPy  && python3 setup.py  install

@@ -14,13 +14,14 @@ RUN CMAKE_INSTALLER=install-cmake.sh && \
 RUN alias cmake=/usr/local/bin/cmake
 # RUN apt-get install -y python3 python3-pip python-pip
 RUN apt-get install sudo
-RUN pip install scipy pandas numpy matplotlib sklearn statsmodels nibabel plotly webcolors scikit-image wheel
+RUN pip install scipy pandas pyyaml numpy matplotlib sklearn Pillow statsmodels==0.12.0 nibabel plotly webcolors scikit-image wheel
 RUN git clone https://github.com/ANTsX/ANTsPy.git
-# RUN cd ANTsPy  && python3 setup.py  install
+RUN cd ANTsPy  && python3 setup.py  install
 # RUN cd ANTsPy  && python3 setup.py bdist_wheel && cd ..
-RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.2.0/antspyx-0.2.0-cp37-cp37m-linux_x86_64.whl
-RUN pip install antspyx-0.2.0-cp37-cp37m-linux_x86_64.whl
+# RUN wget https://github.com/ANTsX/ANTsPy/releases/download/v0.2.0/antspyx-0.2.0-cp37-cp37m-linux_x86_64.whl
+# RUN pip install antspyx-0.2.0-cp37-cp37m-linux_x86_64.whl
 RUN chmod 755 *
-RUN rm antspyx-*cp37-cp37m-linux_x86_64.whl install-cmake.sh
+RUN rm install-cmake.sh
+# RUN rm antspyx-*cp37-cp37m-linux_x86_64.whl install-cmake.sh
 ## Become normal user again
 USER ${NB_USER}
